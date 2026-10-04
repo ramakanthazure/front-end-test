@@ -1,85 +1,69 @@
+@import "tailwindcss";
+
 @font-face {
-	font-family: 'Gotham, Gotham-Light';
-	src: url('/fonts/gotham-light.woff2') format('truetype');
-	font-style: normal;
-	font-display: swap;
+    font-family: 'Gotham';
+    src: url('/fonts/gotham-light.woff2') format('woff2');
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
 }
 
 @font-face {
-	font-family: 'Gotham, Gotham-Light';
-	src: url('/fonts/gotham-medium.woff2') format('truetype');
-	font-style: normal;
-	font-display: swap;
-	font-weight: 600;
+    font-family: 'Gotham';
+    src: url('/fonts/gotham-book.woff2') format('woff2');
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
 }
 
 @font-face {
-	font-family: 'Gotham, Gotham-Book';
-	src: url('/fonts/gotham-book.woff2') format('truetype');
-	font-style: normal;
-	font-display: swap;
-}
-
-@font-face {
-	font-family: 'Gotham, Gotham-Book';
-	src: url('/fonts/gotham-medium.woff2') format('truetype');
-	font-style: normal;
-	font-display: swap;
-	font-weight: 600;
-}
-
-@font-face {
-	font-family: 'Gotham, Gotham-Medium';
-	src: url('/fonts/gotham-medium.woff2') format('truetype');
-	font-style: normal;
-	font-display: swap;
+    font-family: 'Gotham';
+    src: url('/fonts/gotham-medium.woff2') format('woff2');
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
 }
 
 :root {
-	--token-color-colour-brand-red: #da0530;
-	--token-color-colour-brand-purple: #381246;
-	--token-color-colour-background-primary: #ffffff;
-	--token-color-colour-background-secondary: #f5f5f6;
-	--token-color-colour-background-tertiary: #e6e7e8;
-	--token-color-colour-surface-elevation-0: #ffffff;
-	--token-color-colour-surface-elevation-1: #ffffff;
-	--token-color-colour-border-minimal: #e6e7e8;
-	--token-color-colour-border-decorative: #d7d8da;
-	--token-color-colour-border-accessible: #808489;
-	--token-color-colour-border-inverted: #030c16;
-	--token-color-colour-border-inverted-minimal: #1c242d;
-	--token-color-colour-border-inverted-decorative: #303840;
-	--token-color-colour-text-primary: #030c16;
-	--token-color-colour-text-secondary: #676d73;
-	--token-color-colour-text-tertiary: #b8bbbe;
-	--token-color-colour-text-inverted-primary: #ffffff;
-	--token-color-colour-text-inverted-secondary: #808489;
-	--token-color-colour-text-interactive: #da0530;
-	--token-color-colour-text-interactive-minimal: #030c16;
-	--token-color-colour-text-error: #a70d2e;
-	--token-color-colour-text-warning: #be4a0a;
-	--token-color-colour-text-success: #077950;
-	--token-color-colour-text-info: #0072bd;
-	--token-color-colour-text-promotional: #4f145b;
-	--token-color-colour-text-disabled: #808489;
+    --token-color-colour-brand-red: #da0530;
+    --token-color-colour-brand-purple: #381246;
+    --token-color-colour-background-primary: #ffffff;
+    --token-color-colour-background-secondary: #f5f5f6;
+    --token-color-colour-background-tertiary: #e6e7e8;
+    --token-color-colour-surface-elevation-0: #ffffff;
+    --token-color-colour-surface-elevation-1: #ffffff;
+    --token-color-colour-border-minimal: #e6e7e8;
+    --token-color-colour-border-decorative: #d7d8da;
+    --token-color-colour-border-accessible: #808489;
+    --token-color-colour-border-inverted: #030c16;
+    --token-color-colour-border-inverted-minimal: #1c242d;
+    --token-color-colour-border-inverted-decorative: #303840;
+    --token-color-colour-text-primary: #030c16;
+    --token-color-colour-text-secondary: #676d73;
+    --token-color-colour-text-tertiary: #b8bbbe;
+    --token-color-colour-text-inverted-primary: #ffffff;
+    --token-color-colour-text-inverted-secondary: #808489;
+    --token-color-colour-text-interactive: #da0530;
+    --token-color-colour-text-interactive-minimal: #030c16;
+    --token-color-colour-text-error: #a70d2e;
+    --token-color-colour-text-warning: #be4a0a;
+    --token-color-colour-text-success: #077950;
+    --token-color-colour-text-info: #0072bd;
+    --token-color-colour-text-promotional: #4f145b;
+    --token-color-colour-text-disabled: #808489;
 }
 
 * {
   box-sizing: border-box;
 }
 
-html {
-  font-size: 62.5%;
-}
-
 body {
-  font-family: 'Gotham, Gotham-Book';
-  font-weight: normal;
+  font-family: 'Gotham', sans-serif;
+  font-weight: 400;
   color: var(--token-color-colour-text-primary);
   text-align: left;
   margin: 0;
   padding: 0;
-  font-size: 1.6rem;
   overflow-x: hidden;
   background-color: var(--token-color-colour-background-primary);
 }
@@ -104,5 +88,10 @@ header {
 }
 
 a {
-	color: var(--token-color-colour-brand-red);
+  color: var(--token-color-colour-brand-red);
+  text-decoration: underline;
+}
+
+a:hover {
+  text-decoration: none;
 }
