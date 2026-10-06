@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { NormalizedHoliday } from '@/utils/normalize';
 
 interface HolidayCardProps {
@@ -8,27 +8,68 @@ interface HolidayCardProps {
 }
 
 export function HolidayCard({ holiday }: HolidayCardProps) {
+  const [imageStatus, setImageStatus] = useState<'loading' | 'loaded' | 'error'>('loading');
+
   const formattedPrice = new Intl.NumberFormat('en-GB', {
     style: 'currency',
     currency: 'GBP',
     maximumFractionDigits: 0,
   }).format(holiday.pricePerPerson);
 
+  // Preload image in background to ensure it only renders if valid & fully loaded
+  useEffect(() => {
+    const rawUrl = holiday.imageUrl?.trim();
+
+    if (!rawUrl) {
+      setImageStatus('error');
+      return;
+    }
+
+    const img = new Image();
+    img.src = rawUrl;
+
+    img.onload = () => setImageStatus('loaded');
+    img.onerror = () => setImageStatus('error');
+
+    return () => {
+      img.onload = null;
+      img.onerror = null;
+    };
+  }, [holiday.imageUrl]);
+
+  const showImage = imageStatus === 'loaded';
+
   return (
     <article className="border border-slate-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow bg-white flex flex-col md:flex-row">
       {/* Image Container */}
-      <div className="relative w-full md:w-64 h-48 md:h-auto bg-slate-100 flex-shrink-0 flex items-center justify-center text-slate-400">
-        {holiday.imageUrl ? (
+      <div className="relative w-full md:w-64 h-48 md:h-auto bg-slate-100 flex-shrink-0 flex items-center justify-center text-slate-400 overflow-hidden">
+        {showImage ? (
           <img
-            src={holiday.imageUrl}
-            alt={holiday.hotelName}
+            src={holiday.imageUrl!}
+            alt=""
             className="w-full h-full object-cover"
-            onError={(e) => {
-              (e.target as HTMLElement).style.display = 'none';
-            }}
           />
         ) : (
-          <span className="text-xs">No Image Available</span>
+          /* "No Preview Available" Fallback UI */
+          <div className="flex flex-col items-center justify-center p-4 text-slate-400 text-center select-none">
+            <svg
+              className="w-9 h-9 mb-1.5 text-slate-300"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+              />
+            </svg>
+            <span className="text-xs font-medium text-slate-400">
+              No Preview Available
+            </span>
+          </div>
         )}
       </div>
 
