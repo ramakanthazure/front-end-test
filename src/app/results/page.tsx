@@ -33,11 +33,11 @@ function ResultsContent() {
 
   const meta = useMemo(() => deriveFilterOptions(holidays), [holidays]);
 
+  // Read current active state from searchParams
   const selectedMaxPrice = searchParams.get('price')
     ? Number(searchParams.get('price'))
     : meta.maxPrice;
 
-  // Parse multi-select ratings from query param e.g. "3,4" -> [3, 4]
   const selectedRatings = searchParams.get('ratings')
     ? searchParams.get('ratings')!.split(',').map(Number).filter(Boolean)
     : undefined;
@@ -48,6 +48,7 @@ function ResultsContent() {
 
   const sortBy = (searchParams.get('sort') as any) || 'recommended';
 
+  // Apply combined filters
   const filteredHolidays = useMemo(() => {
     return filterAndSortHolidays(holidays, {
       maxPrice: selectedMaxPrice,
@@ -57,8 +58,10 @@ function ResultsContent() {
     });
   }, [holidays, selectedMaxPrice, selectedRatings, selectedFacilities, sortBy]);
 
+  // Merges updates safely with existing URLSearchParams without clearing other parameters
   const handleUpdateParams = (updates: Record<string, string | number | undefined | null>) => {
     const params = new URLSearchParams(searchParams.toString());
+    
     Object.entries(updates).forEach(([key, value]) => {
       if (value === undefined || value === null || value === '') {
         params.delete(key);
@@ -66,6 +69,7 @@ function ResultsContent() {
         params.set(key, String(value));
       }
     });
+
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
@@ -98,11 +102,21 @@ function ResultsContent() {
               sortBy,
             }}
             onFilterChange={(newFilters) => {
-              handleUpdateParams({
-                price: newFilters.maxPrice,
-                ratings: newFilters.ratings?.join(','),
-                facilities: newFilters.facilities?.join(','),
-              });
+              const updates: Record<string, string | number | undefined> = {};
+
+              if ('maxPrice' in newFilters) {
+                updates.price = newFilters.maxPrice;
+              }
+              if ('ratings' in newFilters) {
+                updates.ratings = newFilters.ratings?.join(',');
+              }
+              if ('facilities' in newFilters) {
+                updates.facilities = newFilters.facilities?.length 
+                  ? newFilters.facilities.join(',') 
+                  : undefined;
+              }
+
+              handleUpdateParams(updates);
             }}
             onReset={handleResetFilters}
           />

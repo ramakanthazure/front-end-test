@@ -19,6 +19,8 @@ export function FilterSidebar({ meta, filters, onFilterChange, onReset }: Filter
     const updated = isSelected
       ? filters.facilities.filter((f) => f !== facility)
       : [...filters.facilities, facility];
+
+    // Only pass the facility partial update
     onFilterChange({ facilities: updated });
   };
 
@@ -28,6 +30,7 @@ export function FilterSidebar({ meta, filters, onFilterChange, onReset }: Filter
       ? selectedRatings.filter((r) => r !== star)
       : [...selectedRatings, star];
 
+    // Only pass the ratings partial update (undefined when empty to clear param)
     onFilterChange({ ratings: updated.length > 0 ? updated : undefined });
   };
 
