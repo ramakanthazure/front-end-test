@@ -37,8 +37,9 @@ function ResultsContent() {
     ? Number(searchParams.get('price'))
     : meta.maxPrice;
 
-  const selectedRating = searchParams.get('rating')
-    ? Number(searchParams.get('rating'))
+  // Parse multi-select ratings from query param e.g. "3,4" -> [3, 4]
+  const selectedRatings = searchParams.get('ratings')
+    ? searchParams.get('ratings')!.split(',').map(Number).filter(Boolean)
     : undefined;
 
   const selectedFacilities = searchParams.get('facilities')
@@ -50,11 +51,11 @@ function ResultsContent() {
   const filteredHolidays = useMemo(() => {
     return filterAndSortHolidays(holidays, {
       maxPrice: selectedMaxPrice,
-      minRating: selectedRating,
+      ratings: selectedRatings,
       facilities: selectedFacilities,
       sortBy,
     });
-  }, [holidays, selectedMaxPrice, selectedRating, selectedFacilities, sortBy]);
+  }, [holidays, selectedMaxPrice, selectedRatings, selectedFacilities, sortBy]);
 
   const handleUpdateParams = (updates: Record<string, string | number | undefined | null>) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -92,14 +93,14 @@ function ResultsContent() {
             meta={meta}
             filters={{
               maxPrice: selectedMaxPrice,
-              minRating: selectedRating,
+              ratings: selectedRatings,
               facilities: selectedFacilities,
               sortBy,
             }}
             onFilterChange={(newFilters) => {
               handleUpdateParams({
                 price: newFilters.maxPrice,
-                rating: newFilters.minRating,
+                ratings: newFilters.ratings?.join(','),
                 facilities: newFilters.facilities?.join(','),
               });
             }}

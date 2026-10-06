@@ -12,6 +12,7 @@ interface FilterSidebarProps {
 
 export function FilterSidebar({ meta, filters, onFilterChange, onReset }: FilterSidebarProps) {
   const currentMaxPrice = filters.maxPrice ?? meta.maxPrice;
+  const selectedRatings = filters.ratings || [];
 
   const handleFacilityToggle = (facility: string) => {
     const isSelected = filters.facilities.includes(facility);
@@ -19,6 +20,15 @@ export function FilterSidebar({ meta, filters, onFilterChange, onReset }: Filter
       ? filters.facilities.filter((f) => f !== facility)
       : [...filters.facilities, facility];
     onFilterChange({ facilities: updated });
+  };
+
+  const handleRatingToggle = (star: number) => {
+    const isSelected = selectedRatings.includes(star);
+    const updated = isSelected
+      ? selectedRatings.filter((r) => r !== star)
+      : [...selectedRatings, star];
+
+    onFilterChange({ ratings: updated.length > 0 ? updated : undefined });
   };
 
   return (
@@ -56,24 +66,25 @@ export function FilterSidebar({ meta, filters, onFilterChange, onReset }: Filter
 
       {/* Star Rating Filter */}
       <div>
-        <span className="block text-sm font-medium text-slate-700 mb-2">Minimum Star Rating</span>
+        <span className="block text-sm font-medium text-slate-700 mb-2">Star Rating</span>
         <div className="flex gap-2">
-          {[3, 4, 5].map((star) => (
-            <button
-              key={star}
-              type="button"
-              onClick={() =>
-                onFilterChange({ minRating: filters.minRating === star ? undefined : star })
-              }
-              className={`flex-1 py-1.5 px-2 text-xs rounded border transition-colors ${
-                filters.minRating === star
-                  ? 'bg-red-600 text-white border-red-600 font-bold'
-                  : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
-              }`}
-            >
-              {star}★ +
-            </button>
-          ))}
+          {[3, 4, 5].map((star) => {
+            const isSelected = selectedRatings.includes(star);
+            return (
+              <button
+                key={star}
+                type="button"
+                onClick={() => handleRatingToggle(star)}
+                className={`flex-1 py-1.5 px-2 text-xs rounded border transition-colors ${
+                  isSelected
+                    ? 'bg-red-600 text-white border-red-600 font-bold'
+                    : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                }`}
+              >
+                {star}★
+              </button>
+            );
+          })}
         </div>
       </div>
 
